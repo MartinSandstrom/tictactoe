@@ -1,0 +1,24 @@
+{
+  "name": "tictactoe",
+  "version": "1.0.0",
+  "description": "Small tictactoe project in ClojureScript with Reagent.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-gh-pages": "^0.5.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MartinSandstrom/tictactoe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MartinSandstrom/tictactoe/issues"
+  },
+  "homepage": "https://github.com/MartinSandstrom/tictactoe#readme"
+}

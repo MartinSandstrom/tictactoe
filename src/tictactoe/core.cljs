@@ -8,11 +8,10 @@
 
 (def board-size 5)
 
-(println (new-board board-size))
-
 (defonce app-state (atom
-                    {:text "Hello world from clojure!"
-                     :board (new-board board-size)}))
+                    {:text "TicTacToe!"
+                     :board (new-board board-size)
+                     :board-size 5}))
 
 (defn computer-move [board]
   (prn board)
@@ -70,24 +69,39 @@
    [:line {:x1 -1 :y1 -1 :x2 1 :y2 1}]
    [:line {:x1 -1 :y1 1 :x2 1 :y2 -1}]])
 
+(defn change-board []
+  (let [val (reagent/atom "")]
+    (fn []
+      [:div
+       [:input {:type "text"
+                :placeholder "New board size"
+                :value @val
+                :on-change #(reset! val (-> % .-target .-value))}]
+       [:button {:on-click #(
+                    (swap! app-state assoc :board (new-board (int @val)))
+                    (prn @val))}
+        "Update board"]])))
+
 (defn tictactoe []
-  [:center
-   [:h1 (:text @app-state)]
-   [:svg {:view-box (str "0 0 " board-size " " board-size)
-          :width 500
-          :height 500}
-    (doall
-     (for [i (range (count (:board @app-state)))
-           j (range (count (:board @app-state)))]
-       (case (get-in @app-state [:board i j])
-         "B" [blank i j]
-         "P" [circle i j]
-         "C" [cross i j])))]
-   [:p
-    [:button
-     {:on-click
-      (fn new-game-click [e]
-        (swap! app-state assoc :board (new-board board-size)))} "New game"]]])
+  (let [val (reagent/atom "test")]
+    [:center
+     [:h1 (:text @app-state)]
+     [:div {:style {:margin-bottom "20px"}} [change-board]]
+     [:div [:svg {:view-box (str "0 0 " board-size " " board-size)
+                  :width 500
+                  :height 500}
+            (doall
+             (for [i (range (count (:board @app-state)))
+                   j (range (count (:board @app-state)))]
+               (case (get-in @app-state [:board i j])
+                 "B" [blank i j]
+                 "P" [circle i j]
+                 "C" [cross i j])))]]
+     [:p
+      [:button
+       {:on-click
+        (fn new-game-click [e]
+          (swap! app-state assoc :board (new-board board-size)))} "New game"]]]))
 
 (reagent/render-component [tictactoe]
                           (. js/document (getElementById "app")))

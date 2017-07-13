@@ -40,7 +40,7 @@
           (straight owner board [i j] dir n))))
 
 (defn check-for-winner [player]
-  (if (win? player (:board @app-state) board-size) (js/alert (str player " winning")) ()))
+  (if (win? player (:board @app-state) board-size) (js/alert (if (= player "P") "You are the winner" "You lose")) ()))
 
 (defn blank [i j]
   [:rect {:width 0.9
@@ -86,7 +86,7 @@
   (let [val (reagent/atom "test")]
     [:center
      [:h1 (:text @app-state)]
-     [:div {:style {:margin-bottom "20px"}} [change-board]]
+     ;; ADD when it workd [:div {:style {:margin-bottom "20px"}} [change-board]]
      [:div [:svg {:view-box (str "0 0 " board-size " " board-size)
                   :width 500
                   :height 500}

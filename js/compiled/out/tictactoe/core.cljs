@@ -40,7 +40,7 @@
           (straight owner board [i j] dir n))))
 
 (defn check-for-winner [player]
-  (if (win? player (:board @app-state) board-size) (js/alert (str player " winning")) ()))
+  (if (win? player (:board @app-state) board-size) (js/alert (if (= player "P") "You are the winner" "You lose")) ()))
 
 (defn blank [i j]
   [:rect {:width 0.9

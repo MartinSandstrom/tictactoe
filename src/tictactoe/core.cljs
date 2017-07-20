@@ -14,7 +14,6 @@
                      :board-size 5}))
 
 (defn computer-move [board]
-  (prn board)
   (let [remaining-spots (for [i (range board-size)
                               j (range board-size)
                               :when (= (get-in board [j i]) "B")]
@@ -40,7 +39,10 @@
           (straight owner board [i j] dir n))))
 
 (defn check-for-winner [player]
-  (if (win? player (:board @app-state) board-size) (js/alert (if (= player "P") "You are the winner" "You lose")) ()))
+  (if (win? player (:board @app-state) board-size) 
+      (js/alert (if (= player "P") "You are the winner" "You lose") true) 
+      ()))
+  
 
 (defn blank [i j]
   [:rect {:width 0.9
@@ -94,9 +96,9 @@
              (for [i (range (count (:board @app-state)))
                    j (range (count (:board @app-state)))]
                (case (get-in @app-state [:board i j])
-                 "B" [blank i j]
-                 "P" [circle i j]
-                 "C" [cross i j])))]]
+                 "B" ^{:key (str i j)}[blank i j]
+                 "P" ^{:key (str i j)}[circle i j]
+                 "C" ^{:key (str i j)}[cross i j])))]]
      [:p
       [:button
        {:on-click

@@ -51,7 +51,7 @@
 (defn blank [i j]
   [:rect {:width 0.9
           :height 0.9
-          :fill "grey"
+          :fill "#FBEDB4"
           :x i
           :y j
           :on-click (fn rect-click [e]
@@ -64,15 +64,15 @@
 
 (defn circle [i j]
   [:circle {:r 0.45
-            :cx (+ 0.5 i)
-            :cy (+ 0.5 j)
-            :fill "red"}])
+            :cx (+ 0.45 i)
+            :cy (+ 0.45 j)
+            :fill "#d0e9c6"}])
 
 (defn cross [i j]
-  [:g {:stroke "black"
+  [:g {:stroke "#e27c79"
        :stroke-width 0.35
        :stroke-linecap "round"
-       :transform (str "translate(" (+ 0.5 i) "," (+ 0.5 j) ") "
+       :transform (str "translate(" (+ 0.45 i) "," (+ 0.45 j) ") "
                        "scale(0.35)")}
    [:line {:x1 -1 :y1 -1 :x2 1 :y2 1}]
    [:line {:x1 -1 :y1 1 :x2 1 :y2 -1}]])
@@ -91,9 +91,9 @@
         "Update board"]])))
 
 (defn tictactoe []
-  (let [val (reagent/atom "test")]
     [:center
-     [:h1 (:text @app-state)]
+     [:h1 {:style {:font-family "Helvetica Neue"}}
+      (:text @app-state)]
      ;; ADD when it workd [:div {:style {:margin-bottom "20px"}} [change-board]]
      [:div [:svg {:view-box (str "0 0 " board-size " " board-size)
                   :width 500
@@ -107,9 +107,10 @@
                  "C" ^{:key (str i j)}[cross i j])))]]
      [:p
       [:button
-       {:on-click #(
+       {:style {:background-color "#ACD9F5" :border "2px solid #bcdff1" :color "#31708f" :padding "15px 32px" :text-align "center" :text-decoration "none" :display "inline-block" :font-size "18px" :font-family "Helvetica Neue"}
+        :on-click #(
            (swap! app-state assoc :board (new-board board-size))
-           (swap! app-state assoc :status 1))} "New game"]]]))
+           (swap! app-state assoc :status 1))} "New game"]]])
 
 (reagent/render-component [tictactoe]
                           (. js/document (getElementById "app")))
@@ -118,4 +119,4 @@
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
-  (swap! app-state assoc-in [:text] "Hellow world from text"))
+  )

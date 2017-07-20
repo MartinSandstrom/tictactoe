@@ -11,7 +11,8 @@
 (defonce app-state (atom
                     {:text "TicTacToe!"
                      :board (new-board board-size)
-                     :board-size 5}))
+                     :board-size 5,
+                     :status 1}))
 
 (defn computer-move [board]
   (let [remaining-spots (for [i (range board-size)
@@ -37,11 +38,14 @@
               j (range board-size)
               dir [[1 0] [0 1] [1 1] [1 -1]]]
           (straight owner board [i j] dir n))))
+          
+(defn game-has-ended [player]
+    (js/alert (if (= player "P") "You are the winner" "You lose"))
+    (swap! app-state assoc :status 2))
 
 (defn check-for-winner [player]
   (if (win? player (:board @app-state) board-size) 
-      (js/alert (if (= player "P") "You are the winner" "You lose") true) 
-      ()))
+      (game-has-ended player)))
   
 
 (defn blank [i j]
@@ -51,9 +55,11 @@
           :x i
           :y j
           :on-click (fn rect-click [e]
-                      (swap! app-state assoc-in [:board i j] "P")
+                      (if (= (:status @app-state) 1) 
+                          (swap! app-state assoc-in [:board i j] "P"))
                       (check-for-winner "P")
-                      (swap! app-state update-in [:board] computer-move)
+                      (if (= (:status @app-state) 1)
+                          (swap! app-state update-in [:board] computer-move))
                       (check-for-winner "C"))}])
 
 (defn circle [i j]
@@ -101,9 +107,9 @@
                  "C" ^{:key (str i j)}[cross i j])))]]
      [:p
       [:button
-       {:on-click
-        (fn new-game-click [e]
-          (swap! app-state assoc :board (new-board board-size)))} "New game"]]]))
+       {:on-click #(
+           (swap! app-state assoc :board (new-board board-size))
+           (swap! app-state assoc :status 1))} "New game"]]]))
 
 (reagent/render-component [tictactoe]
                           (. js/document (getElementById "app")))
